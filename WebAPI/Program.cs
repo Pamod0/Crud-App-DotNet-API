@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 // Injecting DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WebApiConnectionString"));
+    options.UseMySQL(builder.Configuration.GetConnectionString("WebApiConnectionString"));
 });
 
 // Injecting Repository to use in controller

@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.Domain;
 using WebAPI.Models.DTO;
-using WebAPI.Repositories.Implementation;
 using WebAPI.Repositories.Interface;
 
 namespace WebAPI.Controllers
 {
-    // https://localhost:xxxx/api/categories
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -43,5 +39,44 @@ namespace WebAPI.Controllers
             };
             return Ok(category);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategoryById(Guid id)
+        {
+            var category = await categoryRepository.GetByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await categoryRepository.GetAllAsync();
+            if (categories == null || !categories.Any())
+            {
+                return NotFound();
+            }
+
+            var response = categories.Select(category => new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            });
+
+            return Ok(response);
+        }
+
     }
 }

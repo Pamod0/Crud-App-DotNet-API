@@ -6,6 +6,7 @@ namespace WebAPI.Repositories.Interface
     {
         Task<Category> CreateAsync(Category category);
         Task<Category> GetByIdAsync(Guid id);
+        Task<IEnumerable<Category>> GetByNameAsync(string name);
         Task<IEnumerable<Category>> GetAllAsync();
     }
 }

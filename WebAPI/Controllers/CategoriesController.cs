@@ -59,6 +59,25 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetCategoriesByName(string name)
+        {
+            var categories = await categoryRepository.GetByNameAsync(name);
+            if (categories == null || !categories.Any())
+            {
+                return NotFound();
+            }
+
+            var response = categories.Select(category => new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            });
+
+            return Ok(response);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
